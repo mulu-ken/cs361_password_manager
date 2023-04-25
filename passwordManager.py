@@ -75,16 +75,17 @@ def forgot_password():
 
 
 def welcome():
+    _ = os.system('cls')
     print("########################################################################################")
     print(colored("PASSWORD MANAGER - WELCOME", 'green', attrs=['bold']))
     print("########################################################################################")
     print("Thank you for using Password Manager to keep your accounts secure!")
     print("")
     print(colored("Please select an option:", 'black', attrs=['bold']))
-    print(colored("1. Login to an existing account", 'green'))
-    print(colored("2. Register for a new account", 'green'))
-    print(colored("3. Forgot password", 'green'))
-    print(colored("4. Exit", 'red'))
+    print(colored("1. Login to an existing account", 'green', attrs=['bold']))
+    print(colored("2. Register for a new account", 'green', attrs=['bold']))
+    print(colored("3. Forgot password", 'green', attrs=['bold']))
+    print(colored("4. Exit", 'red', attrs=['bold']))
     print("")
     option = input(colored(">> ", 'green'))
 
@@ -140,6 +141,8 @@ def login(password_dict):
         _ = os.system('cls')
         # show error message and return to the main menu
         print('Invalid email or password. Please try again or register for a new account')
+        "You will be redirected to the welcome page again. Please enter "
+        input()
         welcome()
 
 
@@ -179,7 +182,8 @@ def password_store(email):
             strong_pass = getpass.getpass("Enter a strong password for the account:\n> ")
 
         # store the password for the account in the dictionary
-        password_data[email]["accounts"][account_name] = {username: strong_pass}
+        password_data[email]["accounts"][account_name] = {"username": username,
+                                                          "password": strong_pass}
 
         print("Password stored successfully!")
 
@@ -463,7 +467,6 @@ def help_menu(email):
             sys.exit()
 
 
-
 def password_retrieve(email, choice):
     _ = os.system('cls')
     print("########################################################################################")
@@ -477,12 +480,13 @@ def password_retrieve(email, choice):
         stored_accounts[num] = account
 
     this_account = stored_accounts[int(choice)]
-    password = password_data[email]["accounts"][this_account]["password"]
-    user_name = password_data[email]["accounts"][this_account]["username"]
+    this_password = password_data[email]["accounts"][this_account]["password"]
+    username = password_data[email]["accounts"][this_account]["username"]
 
-    print(f"username: {user_name}")
-    print(f"password: {password}")
+    print(f"username: {username}")
+    print(f"password: {this_password}")
     input("\nPress enter to continue...")
+
     user_name = password_data[email]["user_name"]
     password = password_data[email]["master_password"]
     show_dashboard(user_name, email, password)
@@ -585,7 +589,7 @@ def register():
 
     # Store user data in password_data dictionary
     new_account = {
-        "name": name,
+        "user_name": name,
         "master_password": master_password,
         "accounts": {}
     }
